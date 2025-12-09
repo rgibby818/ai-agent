@@ -5,7 +5,8 @@ from google.genai import types
 schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
     description=(
-        "Reads and returns the text content of a file at the given relative file path. "
+        "Reads and returns the content of a file at the given relative file path. "
+        "It won't return the entire content if the character count is above a set amount (defaults to 10,000 characters). "
         "The path must be inside the working directory. "
         "If the path is outside the working directory, does not exist, or does not point to a regular file, "
         "an error string is returned."
@@ -49,7 +50,7 @@ def format_content(file_path: str, MAX_CHARS=10000) -> str:
             has_extra = f.read(1)
 
             if has_extra:
-                return content + '[...File "{file_path}" truncated at 10000 characters]'
+                return content + f'[...File "{file_path}" truncated at {MAX_CHARS} characters]'
             return content
     except FileNotFoundError:
         return "Error: File not found."
