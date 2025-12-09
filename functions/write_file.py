@@ -51,7 +51,10 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
     if not is_authorized_path(working_directory, file_path):
         return f'Error: Cannot write to "{file_path}" as it is outside the permitted working directory'
     if not exists(file_abs_path):
-        makedirs(dirname(file_path))
+        try:
+            makedirs(dirname(file_abs_path), exist_ok=True)
+        except Exception as e:
+            return f"Error: creating directory: {e}"
     try:
         with open(file_abs_path, "w") as f:
             f.write(content)
