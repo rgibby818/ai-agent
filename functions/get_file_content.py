@@ -1,6 +1,7 @@
 from os.path import isfile, join, abspath
 from functions.is_authorized import is_authorized_path
 from google.genai import types
+from configs import MAX_CHARS
 
 schema_get_file_content = types.FunctionDeclaration(
     name="get_file_content",
@@ -40,10 +41,10 @@ def get_file_content(working_directory: str, file_path: str) -> str:
     if not isfile(file_abolute_path):
         return f'Error: File not found or is not a regular file "{file_path}"'
 
-    return format_content(file_abolute_path)
+    return format_content(file_abolute_path, MAX_CHARS)
 
 
-def format_content(file_path: str, MAX_CHARS=10000) -> str:
+def format_content(file_path: str, MAX_CHARS: int) -> str:
     try:
         with open(file_path, "r") as f:
             content = f.read(MAX_CHARS)
