@@ -1,6 +1,43 @@
 from os.path import exists, abspath, join, dirname
 from os import makedirs
 from functions.is_authorized import is_authorized_path
+from google.genai import types
+
+schema_write_file = types.FunctionDeclaration(
+    name="write_file",
+    description=(
+        "Writes the provided text content to a file located at the given relative file path "
+        "inside the working directory. "
+        "The file path must stay within the working directory and may not use absolute paths or "
+        "parent directory traversal (e.g., '../'). "
+        "If the file or its parent directories do not exist, they will be created automatically. "
+        "Returns a success message on a successful write, or an error string if writing fails, "
+        "including errors for invalid paths, permission issues, or attempts to write to directories."
+    ),
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path":
+            types.Schema(
+                type=types.Type.STRING,
+                description=(
+                    "Relative path (from the working directory) of the file to write to. "
+                    "Must not be an absolute path and must not escape the working directory. "
+                    "Intermediate directories will be created automatically if missing."
+                )
+            ),
+            "content":
+            types.Schema(
+                type=types.Type.STRING,
+                description=(
+                    "The full text content to write into the file. "
+                    "The file will be overwirtten with this content."
+                )
+            )
+        },
+        required=["file_path", "content"]
+    )
+)
 
 
 def write_file(working_directory: str, file_path: str, content: str) -> str:
@@ -32,3 +69,7 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
         return f'Error: You do not have permission to write to {file_path}'
     except Exception as e:
         return f'Error: {e}'
+
+
+if __name__ == "__main__":
+    print(schema_write_file)

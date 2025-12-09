@@ -1,5 +1,29 @@
 from os.path import isfile, join, abspath
 from functions.is_authorized import is_authorized_path
+from google.genai import types
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description=(
+        "Reads and returns the text content of a file at the given relative file path. "
+        "The path must be inside the working directory. "
+        "If the path is outside the working directory, does not exist, or does not point to a regular file, "
+        "an error string is returned."
+    ),
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path":
+            types.Schema(
+                type=types.Type.STRING,
+                description=(
+                    "Relative path to the file within the working directory."
+                )
+            )
+        },
+        required=["file_path"]
+    )
+)
 
 
 def get_file_content(working_directory: str, file_path: str) -> str:

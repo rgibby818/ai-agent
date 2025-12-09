@@ -1,6 +1,23 @@
 from os.path import abspath, join, getsize, isdir
 from os import listdir
 from functions.is_authorized import is_authorized_path
+from google.genai import types
+
+
+schema_get_files_info = types.FunctionDeclaration(
+    name="get_files_info",
+    description="Lists files in the specified directory along with their sizes, contrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "directory": types.Schema(
+                type=types.Type.STRING,
+                description="The directory to list files from, relative to the working directory. If not provided, lists files in the working directory itself.",
+            ),
+        },
+        required=["directory"]
+    ),
+)
 
 
 def get_files_info(working_directory: str, directory=".") -> str:
@@ -49,4 +66,4 @@ def agent_string_format(file_path: str) -> str:
 
 
 if __name__ == "__main__":
-    print(get_files_info("calculator", "pkg"))
+    print(schema_get_files_info)
