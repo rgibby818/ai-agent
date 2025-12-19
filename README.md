@@ -23,7 +23,7 @@ git clone https://github.com/rgibby818/ai-agent.git
 cd ai-agent
 uv sync
 ```
-create a `.env` file at the root of the directory and enter in your Google Gemini API key, Model, and your working directory:
+create a `.env` file at the root of the directory and enter in your Google Gemini API key and Model:
 ```
 GEMINI_API_KEY='<API_KEY_HERE>'
 MODEL='gemini-2.5-flash'
