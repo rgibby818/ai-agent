@@ -1,10 +1,9 @@
-import os
 from google.genai import types
 from functions.get_file_content import get_file_content, schema_get_file_content
 from functions.write_file import write_file, schema_write_file
 from functions.get_files_info import get_files_info, schema_get_files_info
 from functions.run_python_file import run_python_file, schema_run_python_file
-from dotenv import load_dotenv
+from configs import WORKING_DIR
 
 
 available_functions = types.Tool(
@@ -14,9 +13,6 @@ available_functions = types.Tool(
                            schema_run_python_file
                            ],
 )
-
-load_dotenv()
-working_directory = os.environ.get("WORKING_DIRECTORY")
 
 
 def call_function(function_call_part: types.FunctionCall, verbose=False) -> types.Content:
@@ -54,7 +50,7 @@ def call_function(function_call_part: types.FunctionCall, verbose=False) -> type
     function_to_call = functions.get(function_name)
 
     if function_to_call:
-        function_result = function_to_call(**{**function_args, "working_directory": working_directory})
+        function_result = function_to_call(**{**function_args, "working_directory": WORKING_DIR})
         return types.Content(
             role="tool",
             parts=[
